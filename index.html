@@ -1,0 +1,117 @@
+<script>
+function dump(obj, indent)
+{
+  var result = "";
+  if (indent == null) indent = "";
+
+  for (var property in obj)
+  {
+    var value = obj[property];
+    if (typeof value == 'string')
+      value = "'" + value + "'";
+    else if (typeof value == 'object')
+    {
+      if (value instanceof Array)
+      {
+        // Just let JS convert the Array to a string!
+        value = "[ " + value + " ]";
+      }
+      else
+      {
+        // Recursive dump
+        // (replace "  " by "\t" or something else if you prefer)
+        var od = dump(value, indent + "  ");
+        // If you like { on the same line as the key
+        //value = "{\n" + od + "\n" + indent + "}";
+        // If you prefer { and } to be aligned
+        value = "\n" + indent + "{\n" + od + "\n" + indent + "}";
+      }
+    }
+    result += indent + "'" + property + "' : " + value + ",\n";
+  }
+  return result.replace(/,\n$/, "");
+}
+
+var graph = {
+    "0" : {
+        "1": 10,
+        "2": 5
+    },
+    "1" : {
+        "0": 12,
+        "3": 5
+    },
+    "2" : {
+        "1": 7,
+        "3": 2
+    },
+    "3" : {
+    }
+}
+
+function cleanReciprocicalVertices(graph) {
+    countTransformations = 0;
+
+    for (var i in graph) {
+        for (var j in graph[i]) {
+            if (i in graph[j]) {
+                amount1 = graph[i][j];
+                amount2 = graph[j][i];
+
+                graph[i][j] = Math.max(0, amount1 - amount2);
+                graph[j][i] = Math.max(0, amount2 - amount1);
+
+                countTransformations++;
+                /*if (amount1 >= amount2) {
+                    
+                    graph[j][i] = 0;
+                } else {
+                    graph[i][j] = 0;
+                    graph[j][i] = amount2 - amount1;
+                }*/
+            }
+        }
+    }
+
+    return [graph, countTransformations];
+}
+
+function cleanNullVertices(graph) {
+    countTransformations = 0;
+
+    for (var i in graph) {
+        for (var j in graph[i]) {
+            if (graph[i][j] == 0) {
+                delete graph[i][j];
+
+                countTransformations++;
+            }
+        }
+    }
+
+    return [graph, countTransformations];
+}
+
+function cleanTransitiveVertices(graph) {
+    countTransformations = 0;
+
+    for (var i in graph) {
+        for (var j in graph[i]) {
+            for (var k in graph[j]) {
+                    amount1 = graph[i][j];
+                    amount2 = (k in graph[j]) ? graph[j][k] : 0;
+
+                    graph[i][j] = Math.max(0, amount1 - amount2);
+                    graph[i][k] = Math.min(amount1, amount2);
+                    graph[j][k] = Math.max(0, amount2 - amount1);
+
+                    countTransformations++;
+            }
+        }
+    }
+
+    return [graph, countTransformations];
+}
+
+alert(dump(cleanTransitiveVertices(cleanNullVertices(cleanReciprocicalVertices(graph)[0]))[0]));
+</script>
