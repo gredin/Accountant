@@ -29,16 +29,11 @@ function cleanReciprocicalVertices(graph) {
                 graph[j][i] = Math.max(0, amount2 - amount1);
 
                 countTransformations++;
-                /*if (amount1 >= amount2) {
-                    
-                    graph[j][i] = 0;
-                } else {
-                    graph[i][j] = 0;
-                    graph[j][i] = amount2 - amount1;
-                }*/
             }
         }
     }
+
+console.log(graph);
 
     return [graph, countTransformations];
 }
@@ -56,6 +51,8 @@ function cleanNullVertices(graph) {
         }
     }
 
+console.log(graph);
+
     return [graph, countTransformations];
 }
 
@@ -66,7 +63,12 @@ function cleanTransitiveVertices(graph) {
         for (var j in graph[i]) {
             for (var k in graph[j]) {
                     amount1 = graph[i][j];
-                    amount2 = (k in graph[j]) ? graph[j][k] : 0;
+                    amount2 = graph[j][k];
+
+                    console.log(graph[i]);
+
+                    console.log(amount1);
+                    console.log(amount2);
 
                     graph[i][j] = Math.max(0, amount1 - amount2);
                     graph[i][k] = Math.min(amount1, amount2);
@@ -80,5 +82,12 @@ function cleanTransitiveVertices(graph) {
     return [graph, countTransformations];
 }
 
-console.log(cleanTransitiveVertices(cleanNullVertices(cleanReciprocicalVertices(graph)[0]))[0]);
+g1 = cleanReciprocicalVertices(graph)[0];
+g2 = cleanNullVertices(graph)[0];
+g3 = cleanReciprocicalVertices(graph)[0];
+console.log(g1);
+console.log(g2);
+console.log(g3);
+
+//console.log(cleanTransitiveVertices(cleanNullVertices(cleanReciprocicalVertices(graph)[0]))[0]);
 </script>
