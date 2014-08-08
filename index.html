@@ -33,8 +33,6 @@ function cleanReciprocicalVertices(graph) {
         }
     }
 
-console.log(graph);
-
     return [graph, countTransformations];
 }
 
@@ -51,8 +49,6 @@ function cleanNullVertices(graph) {
         }
     }
 
-console.log(graph);
-
     return [graph, countTransformations];
 }
 
@@ -65,16 +61,15 @@ function cleanTransitiveVertices(graph) {
                     amount1 = graph[i][j];
                     amount2 = graph[j][k];
 
-                    console.log(graph[i]);
-
-                    console.log(amount1);
-                    console.log(amount2);
-
                     graph[i][j] = Math.max(0, amount1 - amount2);
                     graph[i][k] = Math.min(amount1, amount2);
                     graph[j][k] = Math.max(0, amount2 - amount1);
 
                     countTransformations++;
+
+                    console.log([i, j ,k])
+                    console.log(countTransformations);
+                    console.log(JSON.stringify(graph, null, 4));
             }
         }
     }
@@ -82,12 +77,19 @@ function cleanTransitiveVertices(graph) {
     return [graph, countTransformations];
 }
 
-g1 = cleanReciprocicalVertices(graph)[0];
-g2 = cleanNullVertices(graph)[0];
-g3 = cleanReciprocicalVertices(graph)[0];
-console.log(g1);
-console.log(g2);
-console.log(g3);
+console.log(JSON.stringify(graph, null, 4));
+
+graph = cleanReciprocicalVertices(graph)[0];
+
+console.log(JSON.stringify(graph, null, 4));
+
+graph = cleanNullVertices(graph)[0];
+
+console.log(JSON.stringify(graph, null, 4));
+
+graph = cleanTransitiveVertices(graph)[0];
+
+console.log(JSON.stringify(graph, null, 4));
 
 //console.log(cleanTransitiveVertices(cleanNullVertices(cleanReciprocicalVertices(graph)[0]))[0]);
 </script>
